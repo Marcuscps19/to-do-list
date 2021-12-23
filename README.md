@@ -2,8 +2,10 @@
 
 Este projeto foi desenvolvido durante o curso de desenvolvimento web da [Trybe](https://www.betrybe.com/).
 
-Este projeto foi finalizado em **12/03/2021**
+Este projeto foi finalizado em **12/03/2021** <br>
 Atualizações em: **23/12/2021**
+
+### Visualize o projeto nesse link: [To do List](https://marcuscps19.github.io/to-do-list/)
 
 ### Descrição:
 Lista de tarefas simples
