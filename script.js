@@ -8,21 +8,15 @@ const btnSaveTasks = document.getElementById('salvar-tarefas');
 const inputTasks = document.getElementById('texto-tarefa');
 const listOfTasks = document.getElementById('lista-tarefas');
 const listItems = document.getElementsByClassName('item-lista');
+const errorSpan = document.getElementById('error');
 
 function clearInput() {
   inputTasks.value = '';
 }
 
-// Without adding the selected class
-// function removesBackgroundColor() {
-//   for (let index = 0; index < listItems.length; index += 1) {
-//     listItems[index].style.setProperty('background-color', 'transparent');
-//   }
-// }
-// function changeBgColor(event) {
-//   removesBackgroundColor();
-//   event.target.style.setProperty('background-color', 'rgb(128, 128, 128)');
-// }
+function saveTasks() {
+  localStorage.setItem('tasks', listOfTasks.innerHTML);
+}
 
 function removesBackgroundColor() {
   for (let index = 0; index < listItems.length; index += 1) {
@@ -63,7 +57,15 @@ function addInputValuesToListItem(listItem) {
   item.innerText = inputTasks.value;
 }
 
+function isInvalidTask() {
+  return inputTasks.value === '';
+}
+
 function addsTaskToList() {
+  if (isInvalidTask()) {
+    errorSpan.innerText = 'Escreva uma tarefa';
+    return 0;
+  }
   const listItem = createListItem();
   addInputValuesToListItem(listItem);
   listOfTasks.appendChild(listItem);
@@ -73,6 +75,7 @@ function addsTaskToList() {
 
 function clearTasks() {
   listOfTasks.innerHTML = '';
+  localStorage.removeItem('tasks');
 }
 
 function removeCompletedTasks() {
@@ -80,27 +83,13 @@ function removeCompletedTasks() {
   for (let index = 0; index < completedTasks.length; index += 1) {
     listOfTasks.removeChild(completedTasks[index]);
   }
-}
-
-function saveTasks() {
-  localStorage.setItem(1, listOfTasks.innerHTML);
+  saveTasks();
 }
 
 function getSavedTasks() {
-  listOfTasks.innerHTML = localStorage.getItem(1);
+  listOfTasks.innerHTML = localStorage.getItem('tasks');
   updateListItemsListeners();
 }
-
-// I created this function to drop the items before I knew that the insertBefore method existed.
-// for (let index = 0; index < listItems.length; index += 1) {
-//   if (selected[0] === listItems[index] && index !== 0) {
-//     listItems[index].parentNode.insertBefore(
-//       listItems[index],
-//       listItems[index - 1]
-//     );
-//   }
-// }
-// Reference: https://developer.mozilla.org/pt-BR/docs/Web/API/Node/insertBefore
 
 function moveUp() {
   const selected = document.querySelector('.selected');
@@ -118,6 +107,11 @@ function moveDown() {
 function removeSelected() {
   const selected = document.querySelector('.selected');
   listOfTasks.removeChild(selected);
+  saveTasks();
+}
+
+function clearError() {
+  errorSpan.innerText = '';
 }
 
 window.onload = getSavedTasks;
@@ -129,3 +123,4 @@ btnSaveTasks.addEventListener('click', saveTasks);
 btnMoveUp.addEventListener('click', moveUp);
 btnMoveDown.addEventListener('click', moveDown);
 btnRemoveSelected.addEventListener('click', removeSelected);
+inputTasks.addEventListener('click', clearError);
